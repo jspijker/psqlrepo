@@ -1,0 +1,160 @@
+---
+title: "psqlrepo"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{psqlrepo}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, eval=FALSE}
+devtools::load_all()
+source("./tests/testthat/setup.R")
+source("./tests/testthat/teardown.R")
+
+```
+
+
+```{r load,eval=FALSE}
+library(psqlrepo)
+```
+
+# introduction
+
+Psqlrepo is a data repository, or  data management system (DMS), for R
+using a PostgreSQL database as backend. With this package it is possible
+to store R objects from memory in the data repository. Since (almost)
+everything in R is an object, you can store lists, data.frames, functions,
+environments etc. Each object can be supplied with descriptive metadata
+and this metadata can be used to search, group or otherwise query the
+data repository.
+
+For large objects, storing them in a database is not efficient.
+Therefore it is also possible to associate a file directory with the
+repository were data can be stored. These large memory objects can be writen
+to a file, like an Rds, geopackage, or cvs file. Then these files can
+be stored whereby the actual file is copied to file directory and the
+meta data is stored in the database. This metadata is also stored in a
+meta data file associated with the data file. These files can then be
+imported and exported from one psqlrepo data repository to another.
+
+Data lineage, or audit trails, are possible but implemented in a a
+separate package psqltrace. Using psqltrace with psqlrepo makes it possible
+to determine how datasets depends on other datasets and  R scripts, including
+versioning.  Since psqltrace enforces a certain git based workflow,
+it is provided seperately.
+
+## Rationale
+A common data science workflow is given by Grollemund and
+Wickham (20XX), see Figure X. In this workflow, data
+is first imported and tidyied. Subsequently, the resulting dataset
+is used for understanding the data (transform, visualize and model).
+Finally the result of these steps are published. The actual data can be
+kept in memory during the complete proces but more often data is written
+to intermediate files.
+
+In real life this data science workflow is more complex then depicted
+in Figure X. Usually larger project consists of multiple workflows,
+and data is exchanged between these workflows using reading and writing
+to files. These files do not contain any meta data, such as origin of
+the data, the R scripts which created the data, the type of the data
+etc. Working on larger project results in a significant collection of
+files containing data, which are often stored and ad hoc organised. A
+single user might still make sense of this method of storing data
+but when working in teams a more structured approach to store data is
+needed. Especially when these teams strive to have workflows which are
+reproducible and want to make data reusable.
+
+Multiple Data science workflows using a data repository, or data
+management system, might look like Figure X. The major difference with
+the single work flow is that data is'nt stored to a file somewhere on
+disk, but is added to the repository. When adding data to the repository
+informative meta data can be supplied to enhance the re-use of the data.
+
+Storing data into the psqlrepo repository is as simple as storing data
+to a file on disk. Only supplying meta data gives some extra overhead.
+However, this extra overhead outweighs the benefit of having findable and
+tracebale data available. When using the psqltrace package in combination
+with psqlrepo, the most important meta data is automatically generated.
+
+# limitations
+
+While there are many software packages for data management, psqlrepo tries
+to keep things simple. It is fully implemented in R and only depends
+on the availablity of a PostgreSQL server. If a POstgreSQL database is
+available and accessible, the steps to configure and implement the data
+repository are kept to a minimum.
+
+This approach to keep things simple has the caveat that more complex
+configuration options, like access control for stored objects, are not
+present.  Each team member has an equal role
+regarding the data repository. So each user has the same rights to use,
+or to mess up, the data repository.
+
+
+# Configuration file
+
+The configuration of the data repository is stored in a yaml
+configuration file. This yaml file is an ascii file and look likes
+this:
+
+```{}
+
+default:
+  dbhost: localhost
+  dbport: 5432
+  dbname: psqlrepo
+  dbuser: repotest
+  dbpasswd: verysecretpassword
+
+
+remote:
+  dbhost: remote.server.com
+  dbport: 5432
+  dbname: psqlrepo
+  dbuser: repotest
+  dbpasswd: verysecretpassword
+
+```
+
+The above yaml file defines a default configuration and a remote
+configuration. 
+
+# initialization
+
+The `pr_init` function initialises the repository. It reads the
+configuration files, stores the configuration in the namespace of the
+package and connects to the database. This function is called with the
+filename of the configuration file and the configuration 
+itself. For example, to initialise the default configuration:
+
+```{r}
+pr_init(configfile)
+```
+
+To test if a connection with the database exists, you can use the
+`pr_testconnection()` function:
+```{r}
+pr_testconnection()
+```
+
+# Storing and retrieving an object
+
+# Delete an object
+
+# Working with meta data
+
+
+
+
+              
+
+
+

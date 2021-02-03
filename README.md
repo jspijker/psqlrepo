@@ -1,0 +1,44 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# psqlrepo
+
+Psqlrepo is a data repository, or data management system (DMS), for R
+using a PostgreSQL database as backend. With this package it is possible
+to store R objects from memory in the data repository. Since (almost)
+everything in R is an object, you can store lists, data.frames,
+functions, environments etc. Each object can be supplied with
+descriptive metadata and this metadata can be used to search, group or
+otherwise query the data repository. Very large objects can be writen to
+file and stored at a central file location while the meta data is stored
+in the database.
+
+# Development status
+
+This package is currently under development and functions and interfaces
+may change in future versions without backwards compatibility.
+
+## Testing
+
+This package contains tests using the testthat package. When running
+these tests, a temporary database psqlrepoTest and database use psqltest
+are created. It asumes a database at localhost is available without the
+need for user authentication. During the teardown of the tests the
+database and user are dropped.
+
+# Licence
+
+Copyright (C) 2021 Job Spijker
+
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with this program. If not, see <http://www.gnu.org/licenses/>.
