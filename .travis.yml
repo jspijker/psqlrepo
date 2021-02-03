@@ -1,6 +1,9 @@
 language: r
 cache: packages
 
+services:
+    - postgresql
+
 
 before_cache: Rscript -e 'remotes::install_cran("pkgdown")'
 deploy:
