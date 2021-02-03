@@ -16,7 +16,7 @@
 #' current connection is closed and a new connection is created.
 #'
 #' @importFrom yaml read_yaml
-#' @importFrom dbi dbConnect
+#' @importFrom DBI dbConnect dbDriver
 #' @export
 
 
